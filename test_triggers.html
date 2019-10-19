@@ -1,0 +1,88 @@
+<html>
+    <head>
+
+    </head>
+
+    <body>
+
+    </body>
+
+    <script>
+
+/*
+trigger types:
+
+1 - OR trigger
+2 - AND trigger
+
+filter types:
+
+1 / -1 - url contains (not contains)
+2 / -2 - url starts with (not starts)
+3 / -3 - url ends with (not ends)
+4 / -4 - is mainpage
+*/
+
+        var triggers_obj = [{
+            id:123,
+            type:1,
+            filters: [
+                { type:1, param:"triggers" },
+                { type:2, param: "test_"},
+                { type:3, param: ".html"},
+            ]
+        }];
+
+        function mt_process_triggers(triggers){
+
+            var result = false;
+
+            for(var i = 0; i <triggers.length; i++){
+
+                var ret = mt_process_trigger(triggers[i]);                
+                if(ret){
+                    result = true;
+                }
+
+            }
+
+            return result;
+
+        }
+
+        function mt_process_trigger(trigger){
+
+            var filters_result = false;
+
+            for(var i = 0;i< trigger.filters.length;i++){
+
+                var filter = trigger.filters[i];
+                var type = Math.abs(filter.type);
+
+                if(type == 1){
+                    
+                }
+
+                if(type == 2){
+                    
+                }
+
+                if(type == 3){
+                    
+                }
+
+                if(type == 4){
+                    
+                }
+
+            }
+
+        }
+
+        mt_process_triggers(triggers_obj);
+
+    </script>
+
+</html>
+
+
