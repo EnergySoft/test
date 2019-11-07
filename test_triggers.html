@@ -10,10 +10,12 @@
     <script>
 
 /*
-trigger types:
 
-1 - OR trigger
-2 - AND trigger
+filter logic types:
+
+1 - OR
+2 - AND
+3 - REQUIRED
 
 filter types:
 
@@ -21,60 +23,148 @@ filter types:
 2 / -2 - url starts with (not starts)
 3 / -3 - url ends with (not ends)
 4 / -4 - is mainpage
+
 */
 
         var triggers_obj = [{
             id:123,
-            type:1,
             filters: [
-                { type:1, param:"triggers" },
-                { type:2, param: "test_"},
-                { type:3, param: ".html"},
+                { type:1, logic: 1, param:"triggers" },
+                { type:2, logic: 1, param: "test_"},
+                { type:3, logic: 2, param: ".html"},
             ]
         }];
 
-        function mt_process_triggers(triggers){
+        function mt_process_triggers(triggers){      
+            for(var i = 0; i < triggers.length; i++){
+                mt_process_trigger(triggers[i]);
+            }
+        }
+
+        function mt_process_trigger(trigger){         
+
+            console.log('Process triggers obj called');   
+            console.log(trigger);   
+
+            var group_or = new Array();            
+            var group_and = new Array();            
+            var group_required = new Array();
+
+            var group_or_result = null;
+            var group_and_result = null;
+            var group_required_result = null;
 
             var result = false;
 
-            for(var i = 0; i <triggers.length; i++){
+            for(var i = 0; i < trigger.filters.length; i++){
 
-                var ret = mt_process_trigger(triggers[i]);                
-                if(ret){
+                mt_process_filter(trigger.filters[i]);
+
+                if(trigger.filters[i].logic == 1){ // 1 - OR
+                    group_or.push(trigger.filters[i]);
+                }
+
+                if(trigger.filters[i].logic == 2){ // 2 - AND
+                    group_and.push(trigger.filters[i]);
+                }
+
+                if(trigger.filters[i].logic == 3){ // 3 - REQUIRED
+                    group_required.push(trigger.filters[i]);
+                }
+
+            }
+
+            if(group_or.length > 0){ //Process OR filters
+                group_or_result = false;
+                for(var i = 0; i < group_or.length; i++){
+                    if(group_or[i].result){
+                        group_or_result = true;
+                    }
+                }
+            }
+
+            if(group_and.length > 0){ //Process AND filters
+                group_and_result = true;
+                for(var i = 0; i < group_and.length; i++){
+                    if(!group_and[i].result){
+                        group_and_result = false;
+                    }
+                }
+            }
+
+            if(group_required.length > 0){ //Process REQUIRED filters
+                group_and_result = true;
+                for(var i = 0; i < group_required.length; i++){
+                    if(!group_required[i].result){
+                        group_required_result = false;
+                    }
+                }
+            }
+
+            console.log('group_or_result = '+group_or_result);
+            console.log('group_and_result = '+group_and_result);
+            console.log('group_required_result = '+group_required_result);
+
+            if(group_required_result != null){
+                if(group_required_result && (group_or_result || group_and_result)){
+                    result = true;
+                }            
+            } else {
+
+                if(group_or_result == null){
+                    group_or_result = true;
+                }
+
+                if(group_and_result == null){
+                    group_and_result = true;
+                }                
+
+                if(group_or_result || group_and_result){
                     result = true;
                 }
 
             }
 
+            console.log('RESULT = '+result);
+
             return result;
 
         }
 
-        function mt_process_trigger(trigger){
+        function mt_process_filter(filter){
 
-            var filters_result = false;
+            var current_url = '/test_page/triggers_category/index.html';
 
-            for(var i = 0;i< trigger.filters.length;i++){
+            filter.result = false;
+            
+            var type = Math.abs(filter.type);
 
-                var filter = trigger.filters[i];
-                var type = Math.abs(filter.type);
-
-                if(type == 1){
-                    
+            if(type == 1){ // 1 / -1 - url contains (not contains)
+                if(current_url.indexOf(filter.param)>=0){
+                    filter.result = true;
                 }
+            }
 
-                if(type == 2){
-                    
+            if(type == 2){ // 2 / -2 - url starts with (not starts)
+                if(current_url.indexOf(filter.param)==0){
+                    filter.result = true;
                 }
+            }
 
-                if(type == 3){
-                    
+            if(type == 3){ // 3 / -3 - url ends with (not ends)
+
+                filter.result = current_url.endsWith(filter.param);
+                
+            }
+
+            if(type == 4){ // 4 / -4 - is mainpage
+                if(current_url = '/'){
+                    filter.result = true;
                 }
+            }
 
-                if(type == 4){
-                    
-                }
-
+            if(filter.type < 0){
+                filter.result = !filter.result;
             }
 
         }
