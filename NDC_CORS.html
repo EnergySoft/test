@@ -1,0 +1,63 @@
+<html>
+
+<head>
+
+</head>
+
+<body>
+
+    <style>
+        body {
+            background-image: url('https://img02.rl0.ru/afisha/e1425x712p0x71f1218x609q65i/s5.afisha.ru/mediastorage/44/6e/6d5311148e34458c968d43aa6e44.jpg');
+            background-size: contain;
+        }
+    </style>
+
+    <script>
+        var token = "eyJ0eXBlIjoiand0In0=.eyJpZCI6IiIsImVtYWlsIjoiIiwicGhvbmUiOiIiLCJ6ZF9pZCI6IjRkNzNkY2ExLTdkNWQtNDY3Ny04YzVkLTA0YzU3Y2FlZTZkNiIsInpkX3Blcm0iOiJtZW1iZXIiLCJ0aW1lIjoxNTc3MzkzNjc5LCJybmQiOjY4NDQsInBlcm0iOls3NTUwXSwiaXAiOiIwZmJjYTJlZmJmZmUxZDI5OWRiZWNmZGRjMDE4ZjMifQ==.3e46b6cb3cc29224b3f68f82f790030b";
+        var url = "https://dashboardapi.moneytag.tech";
+
+        send_request("/admin/dashboard/api", "subrequest=publisher-dashboard&request_name=year-revenues&action=view&year=2019");
+        send_request("/admin/dashboard/api", "subrequest=publisher-dashboard&request_name=macro-values&action=view&start_date=9/2019&end_date=11/2019&xhr=1");
+        send_request("/admin/dashboard/api", "subrequest=publisher-dashboard&request_name=daily-agregate-turnover-evolution&action=view&startDate=25/11/2019&endDate=25/12/2019&sitesId[]=e4b05046-14d3-4af9-99fb-67c426ade2dd");
+        //send_request("/admin/dashboard/api", "subrequest=publisher-dashboard&request_name=breakdown-compiled-load&action=view&month=12/2019");
+        //send_request("/admin/dashboard/api", "subrequest=publisher-dashboard&request_name=monthly-revenue-cumulative&action=view");
+        //send_request("/admin/dashboard/api", "subrequest=publisher-dashboard&request_name=monthly-revenue-load&action=view");
+
+        //send_request("/admin/dashboard/api", "subrequest=publisher-dashboard&request_name=monthly-revenue-load&action=view");
+		
+		send_request("/admin/site/api", "page=1&limit=20&sort_name=&sort_order=&search_name=company_publisher_id&search_value=0b7342bf-44e5-4846-ae1a-74312427aa36&action=view");
+		
+
+        function send_request(api, params) {
+
+            console.log('Request ' + url + api + ' start ');
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url + api + '?' + params, true);
+            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhr.setRequestHeader("Authorization", token);
+			xhr.setRequestHeader('Accept', 'application/json');
+            //xhr.setRequestHeader("Origin", "http://localhost:4200");
+            //xhr.setRequestHeader("Referer", "http://localhost:4200/monetization/admin/editors-list");
+            //xhr.setRequestHeader("Sec-Fetch-Mode", "cors");
+            //xhr.setRequestHeader("User-Agent", "Mozilla / 5.0(X11; Linux x86_64) AppleWebKit / 537.36(KHTML, like Gecko) Chrome / 76.0 .3809 .132 Safari / 537.36");
+
+            xhr.onreadystatechange = function() { //Вызывает функцию при смене состояния.
+                if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+                    // Запрос завершен. Здесь можно обрабатывать результат.
+                    console.log('Request ' + url + api + ' OK ');
+                }
+            }
+            xhr.send(params);
+
+        }
+    </script>
+
+
+
+
+
+</body>
+
+</html>

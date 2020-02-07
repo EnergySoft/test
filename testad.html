@@ -1,0 +1,315 @@
+<html>
+
+<head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+    <!-- Scripts Partenaires -->
+    <script>
+        window.Adomik = window.Adomik || {};
+        Adomik.randomAdGroup = function() {
+            var rand = Math.random();
+            switch (false) {
+                case !(rand < 0.09):
+                    return "ad_ex" + (Math.floor(100 * rand));
+                case !(rand < 0.10):
+                    return "ad_bc";
+                default:
+                    return "ad_opt";
+            }
+        };
+    </script>
+    <!-- BEGIN CRITEO LOADER -->
+    <script async="async" type="text/javascript" src="//static.criteo.net/js/ld/publishertag.js"></script>
+    <script>
+        window.Criteo = window.Criteo || {};
+        window.Criteo.events = window.Criteo.events || [];
+    </script>
+    <!-- END CRITEO LOADER -->
+    <!-- BEGIN CRITEO ZONE MAPPING -->
+    <script>
+        var adUnits = {
+            "placements": [{
+                "slotid": "dfp_droite-sky",
+                "zoneid": 985994
+            }, /* FREE - FR - CHB - SA - WM IMP - RG - ATF - 120x600 */ ]
+        };
+    </script>
+    <!-- END CRITEO ZONE MAPPING -->
+
+    <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
+    <script>
+        /* DFP - Fonction gÃƒÆ’Ã… nÃƒÆ’Ã… rique */
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+    </script>
+
+    <script>
+        /* Generation du path adunit */
+        var network_id_dfp = "/22336046/";
+        var adunit = "02_webmail_free_web";
+        var adunit_child = "/rg";
+
+        var gptAdSlots = [];
+
+        googletag.cmd.push(function() {
+            /* Creation du Mapping Size ([Resolution], [SizePub]) */
+            var mappingSky = googletag.sizeMapping().
+            addSize([1025, 0], [
+                [120, 600]
+            ]).
+            addSize([768, 0], [
+                [120, 600]
+            ]).
+            addSize([300, 0], [
+                [120, 600]
+            ]).
+            build();
+
+            /* Definition des emplacements */
+            gptAdSlots[0] = googletag.defineSlot(network_id_dfp + adunit + adunit_child + '_sky', [
+                [120, 600]
+            ], 'dfp_droite-sky').defineSizeMapping(mappingSky).setTargeting('pos', ['droite-sky']).setTargeting('ad_group', Adomik.randomAdGroup()).addService(googletag.pubads());
+
+            googletag.pubads().disableInitialLoad();
+
+            googletag.pubads().set("page_url", "https://webmail.free.fr");
+            googletag.pubads().setCentering(true);
+            googletag.pubads().collapseEmptyDivs();
+            googletag.pubads().enableSingleRequest();
+            googletag.pubads().enableAsyncRendering();
+
+            /* Definition des mots clefs */
+            /* Nos mots clefs */
+            googletag.pubads().setTargeting('adulte', ['0']);
+            var nb_random = Math.floor((Math.random() * 10) + 1);
+            googletag.pubads().setTargeting('nb_aleatoire', [nb_random]);
+            googletag.pubads().setTargeting('env', ['prod']);
+            /* Pixi mots clefs */
+            (function(d) {
+                return (function(f) {
+                    var cs = d.cookie.split(/; */);
+                    for (var z = cs.length - 1; z >= 0; z--) {
+                        var m;
+                        if ((m = cs[z].match(/pixi_rta_pos=(.*)/)) && m[1]) {
+                            return f(unescape(m[1]).split(';'));
+                        }
+                    }
+                    return f([])
+                })(function(req_pos) {
+                    var semicolonVars = [];
+                    for (var i = 0; i < req_pos.length; i++) {
+                        semicolonVars.push("pm_" + req_pos[i].replace(/\./g, '_') + "=1");
+                        googletag.pubads().setTargeting("pm_" + req_pos[i].replace(/\./g, '_'), "1");
+                    }
+                    window.pm_req = semicolonVars.join(';');
+                })
+            })(document);
+
+            //<!-- BEGIN AMAZON LOADER -->
+            ! function(a9, a, p, s, t, A, g) {
+                if (a[a9]) return;
+
+                function q(c, r) {
+                    a[a9]._Q.push([c, r])
+                }
+                a[a9] = {
+                    init: function() {
+                        q("i", arguments)
+                    },
+                    fetchBids: function() {
+                        q("f", arguments)
+                    },
+                    setDisplayBids: function() {},
+                    targetingKeys: function() {
+                        return []
+                    },
+                    _Q: []
+                };
+                A = p.createElement(s);
+                A.async = !0;
+                A.src = t;
+                g = p.getElementsByTagName(s)[0];
+                g.parentNode.insertBefore(A, g)
+            }("apstag", window, document, "script", "//c.amazon-adsystem.com/aax2/apstag.js");
+
+            // initialize apstag and have apstag set bids on the googletag slots when they are returned to the page
+            apstag.init({
+                pubID: '3705',
+                adServer: 'googletag',
+                bidTimeout: 1200
+            });
+
+            function fetchHeaderBids() {
+                var bidTimeout = 1200;
+
+                var apstagSlots = [{
+                    slotID: 'dfp_droite-sky',
+                    slotName: network_id_dfp + adunit + adunit_child + '_sky',
+                    sizes: [
+                        [120, 600]
+                    ]
+                }];
+
+                var bidders = ['a9', 'criteo'];
+
+                /* create a requestManager to keep track of bidder state to determine when to send ad server
+                   request and what apstagSlots to request from the ad server */
+                var requestManager = {
+                    adserverRequestSent: false,
+                };
+
+                //loop through bidder array and add the bidders to the request manager:
+                bidders.forEach(function(bidder) {
+                    requestManager[bidder] = false;
+                })
+
+                // a helper function that returns googletag objects corresponding to the slotIDs in the slot objects 
+                function _getGPTSlots(apstagSlots) {
+                    // get all of the slot IDs that were requested
+                    var slotIDs = apstagSlots.map(function(slot) {
+                        return slot.slotID;
+                    });
+                    // return the slot objects corresponding to the slotIDs
+                    return googletag.pubads().getSlots().filter(function(slot) {
+                        // return true if the ID of the slot object is in the slotIDs array
+                        return slotIDs.indexOf(slot.getSlotElementId()) > -1;
+                    });
+
+                }
+
+                // return true if all bidders have returned
+                function allBiddersBack() {
+                    var allBiddersBack = bidders
+                        // get the booleans from the object
+                        .map(function(bidder) {
+                            return requestManager[bidder];
+                        })
+                        // get rid of false values - indicates that the bidder has responded
+                        .filter(Boolean)
+                        // if length is equal to bidders, all bidders are back
+                        .length === bidders.length;
+                    return allBiddersBack;
+                }
+
+                // handler for header bidder responses
+                function headerBidderBack(bidder) {
+                    // return early if request to adserver is already sent
+                    if (requestManager.adserverRequestSent === true) {
+                        return;
+                    }
+                    // flip bidder back flag
+                    if (bidder === 'a9') {
+                        requestManager.a9 = true;
+                    } else if (bidder === 'criteo') {
+                        requestManager.criteo = true;
+                    }
+                    // if all bidders are back, send the request to the ad server
+                    if (allBiddersBack()) {
+                        sendAdserverRequest();
+                    }
+                }
+
+                // actually get ads from DFP
+                function sendAdserverRequest() {
+                    // return early if request already sent
+                    if (requestManager.adserverRequestSent === true) {
+                        return;
+                    }
+
+                    requestManager.adserverRequestSent = true; // flip the boolean that keeps track of whether the adserver request was sent
+                    requestManager.sendAdserverRequest = true; //flip boolean for adserver request to avoid duplicate requests
+
+                    // make ad request to DFP
+                    googletag.cmd.push(function() {
+                        apstag.setDisplayBids();
+                        Criteo.SetDFPKeyValueTargeting();
+                        googletag.pubads().refresh([gptAdSlots[0]]);
+                    });
+                }
+
+                function requestBids(apstagSlots, adUnits, bidTimeout) {
+                    /* fetch apstag bids, set bid targting, then call headerBidderBack
+                       to get the ads for the first time */
+                    apstag.fetchBids({
+                        slots: apstagSlots,
+                        timeout: bidTimeout
+                    }, function(bids) {
+                        headerBidderBack('a9');
+                    });
+
+                    Criteo.events.push(function() {
+                        Criteo.SetLineItemRanges("0.01..9:0.01;9..30:0.05"); // Define the price band range
+                        Criteo.RequestBids(adUnits, function() {
+                            headerBidderBack('criteo');
+                        }, bidTimeout); // Call Criteo and execute the callback function for a given timeout
+                    });
+                }
+
+                //requestBids
+                requestBids(apstagSlots, adUnits, bidTimeout);
+                // set timeout to send request to call sendAdserverRequest() after timeout if all bidders haven't returned before then
+                window.setTimeout(function() {
+                    sendAdserverRequest();
+                }, bidTimeout);
+            };
+
+            fetchHeaderBids();
+
+            //<!-- BEGIN CRITEO CDB -->
+            //var launchAdServer = function() {
+            /* Perform key-value targeting for your ad server */
+            //	Criteo.SetDFPKeyValueTargeting();
+            /* Trigger the ad server */
+            //	googletag.pubads().refresh([gptAdSlots[0]]);
+            //};
+            //<!-- END CRITEO CDB -->
+
+            //<!-- BEGIN CRITEO CDB -->
+            //Criteo.events.push(function() {
+            // Define the price band range
+            //	Criteo.SetLineItemRanges("0.01..9:0.01;9..30:0.05");
+            // Call Criteo and execute the callback function for a given timeout
+            //	Criteo.RequestBids(adUnits, launchAdServer, 1000);
+            //});
+            //<!-- END CRITEO CDB -->
+
+            /* Verification PII */
+            var re = /login=|email=|name=|pwd1=|pwd2=|fai_id=|faipwd1=|faipwd2=|imapuser=|password=|%40|@/;
+            if (!re.test(document.referrer) && !re.test(window.location.href)) {
+                googletag.enableServices();
+            }
+        });
+    </script>
+</head>
+
+<body>
+    <!-- Adslot's refresh function: googletag.pubads().refresh([gptadslots[1]]) -->
+    <div id='dfp_droite-sky'>
+        <script>
+            googletag.cmd.push(function() {
+                googletag.display('dfp_droite-sky');
+            });
+        </script>
+    </div>
+    <!-- BEGIN 494415 - FREE - FR - WM ROUNDCUBE - 120x600 textlink - RG - ADBLOCKING -->
+    <div id="crt-494415" style="width:120px;height:600px;"></div>
+    <script type="text/javascript">
+        var Criteo = Criteo || {};
+        Criteo.events = Criteo.events || [];
+        Criteo.events.push(function() {
+            Criteo.DisplayAcceptableAdIfAdblocked({
+                "zoneid": 494415,
+                "containerid": "crt-494415",
+                "overrideZoneFloor": false
+            });
+        });
+    </script>
+    <!-- END TAG -->
+    <!-- End AdSlot 1 -->
+</body>
+
+</html>

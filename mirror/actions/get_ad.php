@@ -14,7 +14,8 @@ $query = "
 
     SELECT 
     COALESCE(c_to_countries.price, c_to_regions.price, c_to_cityes.price, c_to_objects.price) as price,
-    comp.id
+    comp.id,
+    comp.media_id as media
     FROM companies as comp 
     INNER JOIN core_users AS us ON us.id = comp.user_id AND us.balance > 0 
     LEFT JOIN companies_to_countries AS c_to_countries 
@@ -56,16 +57,20 @@ if($result && pg_num_rows($result) > 0){
     $bidders_amount = count($bidders);
     $winner_bid_index = rand(0,$bidders_amount-1);
 
-    $winner_bid = $bidders[$winner_bid_index];    
+    $winner_bid = $bidders[$winner_bid_index];
 
     if($winner_bid){
 
-        $unic = time().rand(1000000,9999999);
+        $unic = time().rand(1,99999999);
         $unic = substr(md5($unic),0,29);
 
-        $_response['unic'] = $unic;
+        $_response['result'] = Array(
+            'unic' => $unic,
+            'company'=> $winner_bid['id'],
+            'material_id'=> $winner_bid['media']
+        );
 
-        add_impression($DEVICE_ID,$winner_bid['id'], $winner_bid['price'],$unic);
+        add_impression($DEVICE_ID,$winner_bid['id'], $object_id, $city_id, $region_id, $country_id, $winner_bid['price'],$unic);
 
     }
 
@@ -76,6 +81,6 @@ if($result && pg_num_rows($result) > 0){
 
 } else {
 
-    add_impression($DEVICE_ID,0,0);
+    add_impression($DEVICE_ID,0, $object_id, $city_id, $region_id, $country_id, 0);
 
 }

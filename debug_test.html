@@ -1,0 +1,585 @@
+<html>
+
+<head>
+
+</head>
+
+<body>
+    <div id="div_id_test1">aaaaaa</div>
+
+    <br><br><br><br>
+
+    <div id="div_id_test2">bbbbbb</div>
+</body>
+
+
+</html>
+
+<style>
+    body {
+        padding: 0px;
+        margin: 0px;
+    }
+</style>
+
+<script>
+    var w = window;
+
+    w.mt_tags = new Array();
+
+    w.mt_tags.push({
+        id: '12_123123',
+        do: 'div_id_test1',
+        refresh_time: 0,
+        refresh_state: 0,
+        history: Array({
+            e: 'a',
+            c: 'Activate'
+        }, {
+            e: 'e',
+            c: '[m] Script #1'
+        })
+    });
+
+    w.mt_tags.push({
+        id: '13_123125',
+        do: 'div_id_test2',
+        refresh_time: 0,
+        refresh_state: 0,
+        history: Array({
+            e: 'a',
+            c: 'Activate'
+        }, {
+            e: 'e',
+            c: '[m] Script #1'
+        })
+    });
+
+    w.mt_update_debug_menu = function() {
+
+        try {
+
+            var style = document.getElementById('mt_debug_style');
+
+            if (!style) {
+
+                var style = document.createElement('style');
+                style.type = 'text/css';
+                style.setAttribute('id', 'mt_debug_style');
+
+                var inner_html = ' #mt_stat_service_block { font-size: 12px; position: absolute; left: 0px; top: 0px; background: #EEE; border:1px solid #DDD; }'
+
+                inner_html += ' .mt_block_tag { height: 25px; line-height: 25px; border-bottom: 1px solid #DDD; } ';
+                inner_html += ' .mt_block_tag > div { display: block; float: left; height:25px; line-height:25px; padding: 0px 3px; padding-left:10px; padding-right:10px } ';
+                inner_html += ' .mt_tagstatus > div { height:15px; width:15px; border-radius:20px; margin-top:5px; } ';
+
+                inner_html += ' .mt_block_hist { height: 20px; line-height: 20px; } ';
+                inner_html += ' .mt_block_hist > div { transition:1s all; display: block; float: left; height:20px; line-height:20px; padding: 0px 3px; padding-left:10px; padding-right:10px } ';
+
+                inner_html += ' .mt_tagid { width: 70px; cursor: pointer; text-decoration: underline; } ';
+                inner_html += ' .mt_tagstatus { width: 20px; } ';
+                inner_html += ' .mt_tagrefresh { width: 50px; } ';
+                inner_html += ' .mt_tagdiv {width: 150px;  cursor: pointer; text-decoration: underline; } ';
+
+                inner_html += ' .mt_block_history { background: #DDD; } ';
+
+
+
+                inner_html += ' .st_on > div  { background: #0F0; } ';
+                inner_html += ' .st_off > div { background: #F00; } ';
+                style.innerHTML = inner_html;
+                document.getElementsByTagName('head')[0].appendChild(style);
+
+            }
+
+            var block_stat = document.getElementById('mt_stat_service_block');
+
+            if (!block_stat) {
+
+                block_stat = document.createElement('div');
+                block_stat.setAttribute('id', 'mt_stat_service_block');
+                document.body.appendChild(block_stat);
+
+            }
+
+            for (var i = 0; i < w.mt_tags.length; i++) {
+
+                var id = w.mt_tags[i].id;
+                var block_tag = document.getElementById("mt_tag_block_" + id);
+
+                if (!block_tag) {
+                    block_tag = document.createElement('div');
+                    block_tag.setAttribute('id', 'mt_tag_block_' + id);
+                    block_tag.className = 'mt_block_tag';
+                    block_stat.appendChild(block_tag);
+                }
+
+                var block_tagid = document.getElementById("mt_tag_blockid_" + id);
+                var block_tagdiv = document.getElementById("mt_tag_blockdiv_" + id);
+                var block_tagstatus = document.getElementById("mt_tag_blockstatus_" + id);
+                var block_tagrefresh = document.getElementById("mt_tag_blockrefresh_" + id);
+
+                if (!block_tagid) {
+                    block_tagid = document.createElement('div');
+                    block_tagid.setAttribute('id', 'mt_tag_blockid_' + id);
+                    block_tagid.className = 'mt_tagid';
+                    block_tagid.setAttribute('tid', w.mt_tags[i].id);
+                    block_tagid.onclick = function() {
+                        console.log(this.getAttribute('tid'));
+                        document.getElementById('mt_tag_blockhist_' + this.getAttribute('tid')).style.display = 'block';
+                    }
+                    block_tag.appendChild(block_tagid);
+                }
+
+                if (!block_tagdiv) {
+                    block_tagdiv = document.createElement('div');
+                    block_tagdiv.setAttribute('id', 'mt_tag_blockdiv_' + id);
+                    block_tagdiv.className = 'mt_tagdiv';
+                    block_tagdiv.setAttribute('did', w.mt_tags[i].do);
+
+                    block_tagdiv.onclick = function() {
+                        var block = document.getElementById(this.getAttribute('did'));
+                        block.style.border = '3px solid #a832a0';
+                    }
+                    block_tag.appendChild(block_tagdiv);
+                }
+
+                if (!block_tagstatus) {
+                    block_tagstatus = document.createElement('div');
+                    block_tagstatus.setAttribute('id', 'mt_tag_blockstatus_' + id);
+                    block_tagstatus.className = 'mt_tagstatus';
+                    block_tagstatus.innerHTML = '<div></div>';
+                    block_tag.appendChild(block_tagstatus);
+                }
+
+                if (!block_tagrefresh) {
+                    block_tagrefresh = document.createElement('div');
+                    block_tagrefresh.setAttribute('id', 'mt_tag_blockrefresh_' + id);
+                    block_tagrefresh.className = 'mt_tagrefresh';
+                    block_tag.appendChild(block_tagrefresh);
+                }
+
+                block_tagid.innerHTML = id;
+
+                if (w.mt_tags[i].active) {
+                    block_tagstatus.className = 'mt_tagstatus st_on';
+                } else {
+                    block_tagstatus.className = 'mt_tagstatus st_off';
+                }
+
+                block_tagdiv.innerHTML = w.mt_tags[i].do;
+
+                block_tagrefresh.innerHTML = 'r: ' + (w.mt_tags[i].refresh_time - w.mt_tags[i].refresh_state);
+
+                var block_tag_history = document.getElementById("mt_tag_blockhist_" + id);
+
+                if (!block_tag_history) {
+                    block_tag_history = document.createElement('div');
+                    block_tag_history.setAttribute('id', 'mt_tag_blockhist_' + id);
+                    block_tag_history.className = 'mt_block_history';
+                    block_tag_history.style.display = 'none';
+                    block_stat.appendChild(block_tag_history);
+                }
+
+                if (w.mt_tags[i].history) {
+
+                    for (var h = 0; h < w.mt_tags[i].history.length; h++) {
+
+                        var block_hist = document.getElementById("mt_tag_blockhist_" + id + "_" + h);
+
+                        if (!block_hist) {
+                            block_hist = document.createElement('div');
+                            block_hist.setAttribute('id', "mt_tag_blockhist_" + id + "_" + h);
+
+                            block_hist.className = 'mt_block_hist mt_hist_event_' + w.mt_tags[i].history[h].e;
+                            block_hist.innerHTML = '<div>' + w.mt_tags[i].history[h].e + '</div><div>' + w.mt_tags[i].history[h].c + '</div>';
+                            block_tag_history.appendChild(block_hist);
+                        }
+
+                    }
+
+                }
+
+            }
+
+
+
+        } catch (ex) {
+
+        }
+
+    }
+
+    window.setInterval(function() {
+        if (true || w.mt_special_params.includes('status_menu')) {
+            w.mt_update_debug_menu();
+            console.log('Update');
+        }
+    }, 1000);
+</script>
+
+
+<script>
+    var data = {
+        "u": "/",
+        "g": "00",
+        "x": [{
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }, {
+            "c": "3",
+            "u": "899",
+            "s": 0,
+            "a": 0,
+            "p": 0
+        }]
+
+    };
+
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '', true);
+    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+
+    xhr.onload = function() {
+        if (xhr.readyState === 4) {
+
+            w.mt_log(false, 'Response:', xhr.responseText);
+            if (xhr.status === 200) {
+
+            } else {
+                console.error(xhr.statusText);
+            }
+
+        }
+    }
+
+    xhr.send(JSON.stringify(data));
+</script>

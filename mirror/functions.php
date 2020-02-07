@@ -1,13 +1,17 @@
 <?php 
 
-function add_impression($device,$company,$price, $unic = ''){
+function add_impression($device, $company, $object, $city, $region, $country, $price, $unic = ''){
 
     $query = "
-        INSERT INTO impression 
+        INSERT INTO impressions 
         (
             date_impression,
             device_id,
             company_id,
+            object_id,
+            city_id,
+            region_id,
+            country_id,
             price,
             status,
             unic
@@ -17,7 +21,12 @@ function add_impression($device,$company,$price, $unic = ''){
             CURRENT_TIMESTAMP,
             ".$device.",
             ".$company.",
+            ".$object.",
+            ".$city.",
+            ".$region.",
+            ".$country.",
             ".$price.",
+            0,
             '".$unic."'
         )
     ";
