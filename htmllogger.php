@@ -269,7 +269,7 @@
                         .scrollblock{
                             max-width:90%;
                             overflow:hidden;
-                            overflow-x:scroll;
+                            overflow-x:auto;
                         }
 
                     </style>
