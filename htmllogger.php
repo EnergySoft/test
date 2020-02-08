@@ -204,8 +204,8 @@
 
             $html = "
             <div class='block timestamp'>
-                <span class='timestamp_time'>[".$time_text."] [".$timestamp."] [".$time_diff."]</span>
-                <span class='timestamp_comment'>".$comment."</span>
+                <span class='timestamp_time'>[".$time_text."] [".$this->write_ms($time_diff)."]</span>
+                <span class='timestamp_comment'><b>".$comment."</b></span>
             </div>";
 
             $this->print($html);
@@ -270,6 +270,7 @@
             $text_color = '#000';
             $border_color = '#DDD';
             $border_table_color = '#444';
+            $border_radius = '5px';
 
             $html = "
                 <html>
@@ -285,8 +286,7 @@
                     <script>
                         $(document).ready(function() {
                             $('.group_header').click(function(){
-                                $(this).parent().find('.group_content').first().toggle();
-                                $(this).toggleClass('extended');
+                                $(this).parent().toggleClass('extended');
                             });
                         });
                     </script>
@@ -323,21 +323,25 @@
                             padding-left:20px;
                         }
 
+                        .group>.group_header>.group_content{
+                            display:block;
+                        }
+
                         .group_header{
                             cursor:pointer;
                             padding-left:3px;
                             user-select:none;
                         }
 
-                        .group_header>.fa-minus-square-o{
+                        .group>.group_header>.fa-minus-square-o{
                             display:none;
                         }
 
-                        .group_header.extended>.fa-minus-square-o{
+                        .group.extended>.group_header>.fa-minus-square-o{
                             display:inline;
                         }
 
-                        .group_header.extended>.fa-plus-square-o{
+                        .group.extended>.group_header>.fa-plus-square-o{
                             display:none;
                         }
 
@@ -349,11 +353,15 @@
                             padding:5px;
                             margin:3px;
                             border:1px solid ".$border_color.";
-                            border-radius:5px;
+                            border-radius:".$border_radius.";
                         }
 
                         .timestamp{
                             font-style:italic;
+                            border:1px solid #EEE;
+                            background:#fffed1;
+                            padding:5px;
+                            border-radius:".$border_radius.";
                         }
 
                         .scrollblock{
@@ -363,7 +371,7 @@
                         }
 
                         .label{
-                            border-radius:4px;
+                            border-radius:".$border_radius.";
                             padding:3px;
                         }
 
@@ -381,6 +389,11 @@
                 </html>
             ";
             return $html;
+        }
+
+        private function write_ms($ms){
+            if($ms < 1000) return $ms.' ms';
+            if($ms > 1000) return round($ms/1000,3).' s';
         }
 
     }
